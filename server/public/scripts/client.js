@@ -4,6 +4,7 @@ function handleReady() {
   console.log("jquery is loaded!")
 
   $('#submitBtn').on('click', postPlayerData);
+  $('#restartGame').on('click', getStartGame);
 }
 
 function getStartGame () {
@@ -12,7 +13,7 @@ function getStartGame () {
     url: '/startGame'
   }).then(function (response) {
     console.log('Successful getStartGame', response);
-    
+    getPlayerData(response);
   }).catch(function() {
     alert('failed getStartGame');
   })
@@ -31,6 +32,8 @@ function getPlayerData() {
 } // end getPlayerData
 
 function postPlayerData() {
+  //console.log('areDuplicateInputs', areDuplicateInputs());
+  
   $.ajax({
     method: 'POST',
     url: '/playerData',
@@ -44,7 +47,7 @@ function postPlayerData() {
   }).then(function(response) {
     console.log('Successful POST!', response);
     getPlayerData();
-
+    
   }).catch(function (){
     alert('POST Failed!', response)
   })
@@ -62,7 +65,7 @@ function renderPlayerData(playerData) {
     //$(playerData).append(``)
 
     //create the player Name and table head
-    let playerHeader = `<h2>${player.name}</h2>`;
+    let playerHeader = `<h3>${player.name}</h3><input class="text-input" placeholder="${player.name}" id="${player.name}Input">`;
     let tableHead = `
     <thead> 
       <tr>
@@ -91,7 +94,29 @@ function renderPlayerData(playerData) {
     container.append(playerHeader);
     container.append(tableHead);
     container.append(tableBody);
+
+    // Incrementing round number
+    $('#roundCount').text(playerData.length+1);
     
   }
 
 } // end render
+
+function areDuplicateInputs(){
+  let inputs = $('.text-input');
+  let inputArr = inputs.map(el => {
+    console.log(el);
+  });
+
+  console.log('inputArr = ', inputs);
+
+  for(let i=0; i<inputArr.length - 1; i++){
+    for(let j=i+1; j<inputArr.length; j++){
+      if(inputArr[i] === inputArr[j]){
+        return true;
+      }
+    }
+  }
+
+  return false;
+}

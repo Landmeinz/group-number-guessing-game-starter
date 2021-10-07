@@ -1,0 +1,9 @@
+--- currently not working with empty guesses in array
+
+--- restart game button
+
+--- new game display; how the DOM looks on round 1; 
+
+--- display winner
+
+--- 

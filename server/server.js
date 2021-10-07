@@ -21,7 +21,14 @@ app.use(express.static('server/public'));
 app.listen(PORT, () => {
   console.log ('Server is running on port', PORT)
 })
-
+// create server-side startGame function
+app.get('/startGame', (res, req) => {
+  console.log('inside server side startGame');
+  for (let player of data){
+    console.log(player);
+  }
+  res.send(data);
+})
 // create server-side get function to send updated player guess data
 app.get('/playerData', (req, res) => {
   res.send(data);
@@ -55,6 +62,9 @@ function addGuessArrays(guesses) {
     console.log(`${guesser}'s guess is ${guess}`);
     console.log(`Array to add to ${guesser} is: ${createGuessArray(guess)}`);
     data[i].guesses.push(createGuessArray(guess));
+    if (guess === numberToGuess) { 
+      data[i].wins++;
+    }
     i++;
   }
   console.log(data)
