@@ -33,11 +33,11 @@ function postPlayerData() {
     method: 'POST',
     url: '/playerData',
     data: {
-      Eric: 20,
-      Nick: 15,
-      Hamsa: 10,
-      Matt: 5,
-      Jordan: 25
+      "Eric": 20,
+      "Nick": 15,
+      "Hamsa": 10,
+      "Matt": 5,
+      "Jordan: 25
     }
   }).then(function(response) {
     console.log('Successful POST!', response);
@@ -50,10 +50,18 @@ function postPlayerData() {
 
 function renderPlayerData(playerData) {
   // empty player date tables before re-render
-  $(playerData).empty()
+  $('#container').empty();
   for (let player of playerData){
     //$(playerData).append(``)
-    let playerTable = $('<tbody></tbody>');
+    let playerHeader = `<h2>${player.name}</h2>`;
+    let tableHead = `
+    <thead> 
+      <tr>
+        <th>Previous Guess:</th>
+        <th>Feedback:</th>
+      </tr>
+    </thead>`;
+    let tableBody = $('<tbody></tbody>');
     
     for(let guess of player.guesses){
       let previousGuess = guess[0];
@@ -63,10 +71,15 @@ function renderPlayerData(playerData) {
           <td id="nickPrevious">${previousGuess}</td>
           <td id="nickFeedback">${feedback}</td>
         </tr>
-        `
+        `;
+
+        tableBody.append(row);
     }
 
-
+    let container = $('#container');
+    container.append(playerHeader);
+    container.append(tableHead);
+    container.append(tableBody);
     
   }
 

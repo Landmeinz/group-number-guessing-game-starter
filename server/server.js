@@ -9,20 +9,6 @@ const numberGenerator = require('./modules/numberGenerator.js');
 let numberToGuess = numberGenerator();
 console.log('number to guess', numberToGuess);
 
-function createGuessArray(guess) {
-  let result = '';
-  if (guess === numberToGuess){
-    result = 'Just Right';
-  } else if (guess < numberToGuess) {
-    result = 'Too Low';
-  }
-  else result = 'Too High';
-  console.log('resulting array is [${guess}, ${result}]');
-  return [guess, result];
-}
-
-
-
 // This must be added before GET & POST routes.
 app.use(bodyParser.urlencoded({extended:true}))
 
@@ -44,16 +30,31 @@ app.get('/playerData', (req, res) => {
 app.post('/playerData', (req, res) => {
   console.log('This is players req.body', req.body);
   let guesses = req.body;
-  console.log('Eric guess is: ', guesses.Eric);
-  let arrayToAdd = createGuessArray(guesses.Eric);
-  console.log('Array to add is:', arrayToAdd);
-  data[0].guesses.push(arrayToAdd);
-  console.log(data);
+  addGuessArrays(guesses);
   res.sendStatus(201);
 });
 
-function addGuessArrays(guesses) {
-  for (let i=0; i < data.length; i++) {
-    
+function createGuessArray(guess) {
+  let result = '';
+  if (guess === numberToGuess){
+    result = 'Just Right';
+  } else if (guess < numberToGuess) {
+    result = 'Too Low';
   }
+  else result = 'Too High';
+  console.log('resulting array is [${guess}, ${result}]');
+  return [guess, result];
+}
+
+function addGuessArrays(guesses) {
+  let i = 0;
+  for (let guesser in guesses) {
+    let guess = guesses[`${guesser}`];
+    console.log(`${guesser}'s guess is ${guess}`);
+    let arrayToAdd = createGuessArray(guess);
+    console.log(`Array to add to ${guesser} is:, ${arrayToAdd}`);
+    data[i].guesses.push(arrayToAdd);
+    i++;
+  }
+  console.log(data);
 }
