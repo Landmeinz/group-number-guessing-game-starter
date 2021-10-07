@@ -22,7 +22,7 @@ function getPlayerData() {
     url: '/playerData',
   }).then(function (response) {
     console.log('successful getPlayerData', response);
-    render(response);
+    renderPlayerData(response);
   }).catch(function () {
     alert('Failed getPlayerData')
   })
@@ -37,7 +37,7 @@ function postPlayerData() {
       "Nick": 15,
       "Hamsa": 10,
       "Matt": 5,
-      "Jordan: 25
+      "Jordan": 25
     }
   }).then(function(response) {
     console.log('Successful POST!', response);
@@ -49,10 +49,17 @@ function postPlayerData() {
 } // end postPlayerData
 
 function renderPlayerData(playerData) {
-  // empty player date tables before re-render
-  $('#container').empty();
+  // empty player data tables before re-render
+  //console.log('playerData', playerData);
+  let container = $('#container');
+  container.empty();
+  
+  //Create a table, etc. for each player and append
   for (let player of playerData){
+    //console.log('player', player)
     //$(playerData).append(``)
+
+    //create the player Name and table head
     let playerHeader = `<h2>${player.name}</h2>`;
     let tableHead = `
     <thead> 
@@ -63,7 +70,9 @@ function renderPlayerData(playerData) {
     </thead>`;
     let tableBody = $('<tbody></tbody>');
     
+    //Add a row for each player guess
     for(let guess of player.guesses){
+      //console.log('guess', guess);
       let previousGuess = guess[0];
       let feedback = guess[1];
       let row = `
@@ -76,7 +85,7 @@ function renderPlayerData(playerData) {
         tableBody.append(row);
     }
 
-    let container = $('#container');
+    //add it all to the DOM
     container.append(playerHeader);
     container.append(tableHead);
     container.append(tableBody);

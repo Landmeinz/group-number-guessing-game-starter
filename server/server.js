@@ -34,27 +34,30 @@ app.post('/playerData', (req, res) => {
   res.sendStatus(201);
 });
 
+// make a function to create a single array to add to data given a singular guess
 function createGuessArray(guess) {
-  let result = '';
+  let result = ''; // initialize result
   if (guess === numberToGuess){
     result = 'Just Right';
   } else if (guess < numberToGuess) {
     result = 'Too Low';
   }
   else result = 'Too High';
-  console.log('resulting array is [${guess}, ${result}]');
-  return [guess, result];
+  return [String(guess), result];
+  
 }
 
+// function to loop through all of the guesses and add to the 
 function addGuessArrays(guesses) {
   let i = 0;
   for (let guesser in guesses) {
     let guess = guesses[`${guesser}`];
     console.log(`${guesser}'s guess is ${guess}`);
-    let arrayToAdd = createGuessArray(guess);
-    console.log(`Array to add to ${guesser} is:, ${arrayToAdd}`);
-    data[i].guesses.push(arrayToAdd);
+    console.log(`Array to add to ${guesser} is: ${createGuessArray(guess)}`);
+    data[i].guesses.push(createGuessArray(guess));
     i++;
   }
-  console.log(data);
+  console.log(data)
+  console.log(data[0].guesses);
+  
 }
