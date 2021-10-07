@@ -15,3 +15,8 @@ app.use(express.static('server/public'));
 app.listen(PORT, () => {
   console.log ('Server is running on port', PORT)
 })
+
+// create server-side get function to send updated player guess data
+app.get('/playerData', (req, res) => {
+  res.send(data);
+})
