@@ -2,6 +2,8 @@ $(document).ready(handleReady);
 
 function handleReady() {
   console.log("jquery is loaded!")
+
+  $('#submitBtn').on('click', postPlayerData);
 }
 
 function getStartGame () {
@@ -33,11 +35,11 @@ function postPlayerData() {
     method: 'POST',
     url: '/playerData',
     data: {
-      "Eric": 20,
-      "Nick": 15,
-      "Hamsa": 10,
-      "Matt": 5,
-      "Jordan": 25
+      "Eric": $('#ericInput').val(),
+      "Nick": $('#nickInput').val(),
+      "Hamsa": $('#hamsaInput').val(),
+      "Matt": $('#mattInput').val(),
+      "Jordan": $('#jordanInput').val()
     }
   }).then(function(response) {
     console.log('Successful POST!', response);
