@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
 const PORT = 5000;
-let data = require('./modules/data-draft.js');
+let data = require('./modules/data.js');
 
 const numberGenerator = require('./modules/numberGenerator.js');
 
@@ -22,11 +22,15 @@ app.listen(PORT, () => {
   console.log ('Server is running on port', PORT)
 })
 // create server-side startGame function
-app.get('/startGame', (res, req) => {
+app.get('/startGame', (req, res) => {
   console.log('inside server side startGame');
   for (let player of data){
     console.log(player);
+    player.guesses = [];
   }
+  numberToGuess = numberGenerator();
+  console.log(numberToGuess);
+  
   res.send(data);
 })
 // create server-side get function to send updated player guess data
@@ -44,7 +48,7 @@ app.post('/playerData', (req, res) => {
 // make a function to create a single array to add to data given a singular guess
 function createGuessArray(guess) {
   let result = ''; // initialize result
-  if (guess === numberToGuess){
+  if (Number(guess) === numberToGuess){
     result = 'Just Right';
   } else if (guess < numberToGuess) {
     result = 'Too Low';

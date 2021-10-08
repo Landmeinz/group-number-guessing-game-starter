@@ -5,6 +5,7 @@ function handleReady() {
 
   $('#submitBtn').on('click', postPlayerData);
   $('#restartGame').on('click', getStartGame);
+  getPlayerData();
 }
 
 function getStartGame () {
@@ -38,11 +39,11 @@ function postPlayerData() {
     method: 'POST',
     url: '/playerData',
     data: {
-      "Eric": $('#ericInput').val(),
-      "Nick": $('#nickInput').val(),
-      "Hamsa": $('#hamsaInput').val(),
-      "Matt": $('#mattInput').val(),
-      "Jordan": $('#jordanInput').val()
+      "Eric": $('#EricInput').val(),
+      "Nick": $('#NickInput').val(),
+      "Hamsa": $('#HamsaInput').val(),
+      "Matt": $('#MattInput').val(),
+      "Jordan": $('#JordanInput').val()
     }
   }).then(function(response) {
     console.log('Successful POST!', response);
@@ -55,9 +56,12 @@ function postPlayerData() {
 
 function renderPlayerData(playerData) {
   // empty player data tables before re-render
-  //console.log('playerData', playerData);
+  console.log('playerData', playerData);
   let container = $('#container');
   container.empty();
+
+  $(`#winnerContainer`).empty(); 
+  $(`#winnerContainer`).css("display", "none")
   
   //Create a table, etc. for each player and append
   for (let player of playerData){
@@ -65,7 +69,7 @@ function renderPlayerData(playerData) {
     //$(playerData).append(``)
 
     //create the player Name and table head
-    let playerHeader = `<h3>${player.name}</h3><input class="text-input" placeholder="${player.name}" id="${player.name}Input">`;
+    let playerHeader = `<h3>${player.name}</h3><input class="text-input" placeholder="next guess" id="${player.name}Input">`;
     let tableHead = `
     <thead> 
       <tr>
@@ -73,17 +77,26 @@ function renderPlayerData(playerData) {
         <th>Feedback:</th>
       </tr>
     </thead>`;
-    let tableBody = $('<tbody></tbody>');
+    let tableBody = $('<div="box"><tbody></tbody><div>');
     
     //Add a row for each player guess
     for(let guess of player.guesses){
+      let row = '';
+      if(!guess){
+        continue;
+      }
       //console.log('guess', guess);
       let previousGuess = guess[0];
       let feedback = guess[1];
-      let row = `
+
+      if(feedback === `Just Right`){
+        announceWinner(player.name)
+      }
+
+      row = `
         <tr>
-          <td id="nickPrevious">${previousGuess}</td>
-          <td id="nickFeedback">${feedback}</td>
+          <td>${previousGuess}</td>
+          <td>${feedback}</td>
         </tr>
         `;
 
@@ -96,11 +109,22 @@ function renderPlayerData(playerData) {
     container.append(tableBody);
 
     // Incrementing round number
-    $('#roundCount').text(playerData.length+1);
+    $('#roundCount').text(player.guesses.length+1);
     
   }
 
 } // end render
+
+
+
+function announceWinner(name){
+  $(`#winnerContainer`).append(`
+    <h2>${name}</h2>
+  `)
+  $(`#winnerContainer`).css("display", "grid")
+}
+
+
 
 function areDuplicateInputs(){
   let inputs = $('.text-input');

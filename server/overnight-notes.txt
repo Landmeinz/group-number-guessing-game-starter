@@ -2,7 +2,7 @@
 
 --- restart game button
 
---- new game display; how the DOM looks on round 1; 
+--- new game display; how the DOM looks on restart, round 1; 
 
 --- display winner
 
